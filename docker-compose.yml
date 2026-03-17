@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # PHP/Apache Web Server
+  web:
+    build: .
+    container_name: erms-web
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      - DB_HOST=db
+      - DB_NAME=ermsdb
+      - DB_USER=root
+      - DB_PASSWORD=password
+    depends_on:
+      - db
+    networks:
+      - erms-network
+
+  # MySQL Database Server
+  db:
+    image: mysql:8.0
+    container_name: erms-db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ermsdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./ermsdb.sql:/docker-entrypoint-initdb.d/ermsdb.sql
+    networks:
+      - erms-network
+
+volumes:
+  db_data:
+
+networks:
+  erms-network:
+    driver: bridge
