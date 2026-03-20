@@ -16,10 +16,6 @@ COPY . .
 
 # copy entrypoint
 RUN mv .andasy/entrypoint.sh /usr/local/bin/entrypoint.sh
-
-# copy supervisor configuration
-COPY .andasy/supervisord.conf /etc/supervisor/supervisord.conf
-
 # expose HTTP port (MySQL port remains internal)
 EXPOSE 80
 
